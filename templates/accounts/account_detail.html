@@ -1,0 +1,46 @@
+{% include 'base.html' with name=username  valid=True only%}
+{% block content %}
+<div class="container back">
+        <div class="user_header">
+            <img class="display_pictures" src="{{userform.profile.avatar.url}}" />
+            <div class="user_data">
+                <div class="container-fluid">
+                    <strong><p>{{userform.username}}</p></strong>
+                    <p style="float:right">
+                    {% if userform.username == username %}
+                        <a href="{% url 'users:update' username=username %}">
+                            <button class="btn btn-primary">Update</button>
+                        </a>
+                    {% elif connected %}
+                        <a href="{% url 'users:unfollow' username=userform.username %}">
+                            <button class="btn btn-primary">Unfollow</button>
+                        </a>
+                    {% else  %}
+                        <a href="{% url 'users:follow' username=username %}">
+                            <button class="btn btn-primary">follow</button>
+                        </a>
+                    {% endif %}
+                    </p>
+                </div>
+                <div class="site_details">
+                    <p><strong>{{ userform.post_count }}</strong> Posts </p>
+                    <p> <strong>{{ userform.followers }}</strong> <a href="{% url 'users:followers' username=userform.username %}"> Followers </a> </p>
+                    <p> <strong>{{ userform.following }}</strong> <a href="{% url 'users:following' username=userform.username %}">Following</a></p>
+                </div>
+                <div>
+                    <p>{{userform.profile.bio}}</p>
+                    <a href="http://{{userform.profile.website}}">{{userform.profile.website}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid posts" >
+            {% for post in userform.posts %}
+                <a href="{% url 'posts:view' username=userform.username slug=post.id%}">
+                <div class="post_container">
+                    <img src="{{post.file.url}}" >
+                </div>
+                </a>
+           {% endfor %}
+        </div>
+    </div>
+{% endblock %}

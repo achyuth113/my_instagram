@@ -1,0 +1,29 @@
+{% include 'base.html' with name=username  valid=True only%}
+{% block content %}  
+<center><h3>{{title}}</h3>
+    <ul class="list-group list-group-flush">
+        {% for user in userform %}
+           <div class="card" style="width: 60rem;height:10rem;">
+                <img class="img-circle" alt="Cinque Terre" style="float:left;width: 10rem;height:10rem;" src="{{user.profile.avatar.url}}" >
+                <div class="card-header">
+                    <p style="float:left">@<a href="{% url 'users:profile' username=user.username %}">{{ user.username }}</a></p>
+                    <p style="float:right">
+                    {% if user.username == username %}
+                    {% elif user.is_followed %}
+                        <a href="{% url 'users:unfollow' username=user.username %}" class="btn btn-success">Unfollow</a>
+                    {% elif user.nothing %}
+                    {% else  %}
+                        <a href="{% url 'users:follow' username=user.username %}" class="btn btn-primary">Follow</a>
+                    {% endif %}
+                    </p><br><br>
+                </div>
+                <div class="card-body">
+                    <center>followers: {{ user.followers }}&nbsp;&nbsp;
+                    following: {{ user.following }}</center>
+                </div>
+           </div>
+           <br>
+        {% endfor %}
+    </ul>
+</center>
+{% endblock %}
